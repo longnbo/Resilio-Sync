@@ -1,6 +1,6 @@
 # Resilio-Sync
 Resilio Sync一键安装脚本
-=====
+
 
 #安装必要的软件包  
 yum -y install wget unzip  
