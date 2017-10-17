@@ -28,10 +28,12 @@ function install_sync(){
 	./rslsync --dump-sample-config > sync.conf 
 	declare user=$(cat sync.conf|grep 'login')
 	declare upass=$(cat sync.conf|grep ",\"password\"")
-	read -p "请输入用户名:" newuser
+# 	read -p "请输入用户名:" newuser
+	read -p "username:" newuser
 	suser=${newuser}
 	declare newuser=",\"login\" : \"${newuser}\""
-	read -p "请设置密码:" newpass
+#	read -p "请设置密码:" newpass
+	read -p "password:" newpass
 	spass=${newpass}
 	declare newpass=",\"password\" : \"${newpass}\""
 	sed -i "s%${user}%${newuser}%g" sync.conf
@@ -44,11 +46,12 @@ function install_sync(){
 	#获取IP
 	osip=$(curl http://https.tn/ip/myip.php?type=onlyip)
 	chk_firewall
-	echo "############################# 安装成功 #############################"
+	echo "########################## successful #############################"
 	echo "访问地址:http://${osip}:8888/"
-	echo "用户名:"${suser}
-	echo "密码:"${spass}
-	echo "帮助中心:https://www.xiaoz.me/archives/8219"
+	echo "username:"${suser}
+	echo "password:"${spass}
+	echo "############################# 安装成功 #############################"	
+#	echo "帮助中心:https://www.xiaoz.me/archives/8219"
 }
 
 #卸载
@@ -59,26 +62,26 @@ function uninstall_sync(){
 	#删除alias
 	sed -i '/^.*mysync.*/'d ~/.bashrc
 	sed -i '/^.*rslsync.*/'d /etc/rc.local 
-	echo "卸载完成."
+	echo "uninstall completed. 卸载完成."
 }
 #搜索是否存在RslSync文件夹
 echo "##########	欢迎使用Resilio Sync一键安装脚本	##########"
-echo "1.安装Resilio Sync"
-echo "2.卸载Resilio Sync"
-echo "3.退出"
+echo "1.install Resilio Sync"
+echo "2.uninstall Resilio Sync"
+echo "3.exit"
 
 declare -i stype
-read -p "请输入选项:（1.2.3）:" stype
+read -p "input:（1.2.3）:" stype
 
 if [ "$stype" == 1 ]
 	then
 		#检查目录是否存在
 		if [ -e "/home/RslSync" ]
 			then
-			echo "目录存在，请检查是否已经安装。"
+			echo "dir already exsist."
 			exit
 		else
-			echo "目录不存在，创建目录..."
+			echo "make dir..."
 			mkdir -p /home/RslSync
 			#执行安装函数
 			install_sync
@@ -91,5 +94,5 @@ if [ "$stype" == 1 ]
 		then
 			exit
 	else
-		echo "参数错误！"
+		echo "error!"
 	fi	
